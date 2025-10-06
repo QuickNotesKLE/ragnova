@@ -1,37 +1,44 @@
-
 # ==========================================================
 # FastAPI + Tesseract OCR + Poppler (for pdf2image)
 # ==========================================================
 FROM python:3.11-slim
 
-# Install system dependencies
-# - poppler-utils: for pdf2image
-# - tesseract-ocr: for local OCR
-# - libjpeg, zlib: for Pillow image handling
+# ----------------------------------------------------------
+# 🧩 Install system dependencies
+# ----------------------------------------------------------
 RUN apt-get update && apt-get install -y \
-    poppler-utils \
-    tesseract-ocr \
-    libjpeg-dev \
+    poppler-utils \         # for pdf2image
+    tesseract-ocr \         # for local OCR
+    libjpeg-dev \           # for Pillow image handling
     zlib1g-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Set working directory
+# ----------------------------------------------------------
+# 🏗️ Set working directory
+# ----------------------------------------------------------
 WORKDIR /app
 
-# Copy dependency list first (for Docker layer caching)
+# Copy dependency list (for Docker layer caching)
 COPY requirements.txt .
 
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the FastAPI app source code
+# ----------------------------------------------------------
+# 📦 Copy project files
+# ----------------------------------------------------------
 COPY . .
 
-# Expose Railway’s dynamic port
+# ----------------------------------------------------------
+# 🔧 Expose port (Railway dynamically assigns one)
+# ----------------------------------------------------------
 EXPOSE 8080
 
-# Optional: define where Tesseract language data lives
+# Optional: specify Tesseract language data location
 ENV TESSDATA_PREFIX=/usr/share/tesseract-ocr/4.00/tessdata/
 
-# Run FastAPI app (Railway will auto-inject PORT env var)
-CMD ["bash", "-c", "uvicorn chat:app --host 0.0.0.0 --port ${PORT:-8080}"]
+# ----------------------------------------------------------
+# 🚀 Start FastAPI app
+# ----------------------------------------------------------
+# Use ${PORT:-8080} fallback for local dev; Railway sets $PORT automatically
+CMD ["bash", "-c", "uvicorn app:app --host 0.0.0.0 --port ${PORT:-8080}"]
