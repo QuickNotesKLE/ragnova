@@ -7,9 +7,9 @@ FROM python:3.11-slim
 # 🧩 Install system dependencies
 # ----------------------------------------------------------
 RUN apt-get update && apt-get install -y \
-    poppler-utils \         # for pdf2image
-    tesseract-ocr \         # for local OCR
-    libjpeg-dev \           # for Pillow image handling
+    poppler-utils \
+    tesseract-ocr \
+    libjpeg-dev \
     zlib1g-dev \
     && rm -rf /var/lib/apt/lists/*
 
