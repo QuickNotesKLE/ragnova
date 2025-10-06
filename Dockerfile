@@ -39,6 +39,5 @@ ENV TESSDATA_PREFIX=/usr/share/tesseract-ocr/4.00/tessdata/
 
 # ----------------------------------------------------------
 # 🚀 Start FastAPI app
-# ----------------------------------------------------------
-# Use ${PORT:-8080} fallback for local dev; Railway sets $PORT automatically
-CMD ["bash", "-c", "uvicorn app:app --host 0.0.0.0 --port ${PORT:-8080}"]
+CMD exec python app.py
+
