@@ -36,7 +36,9 @@ app.include_router(chat_router)
 app.include_router(question_router)
 
 # ==========================================================
-# Run the app
+# Run the App
 # ==========================================================
 if __name__ == "__main__":
-    uvicorn.run("app:app", host="0.0.0.0", port=8000, reload=True)
+    import os
+    port = int(os.environ.get("PORT", 8000))  # Default to 8000 locally
+    uvicorn.run("app:app", host="0.0.0.0", port=port, reload=True)
